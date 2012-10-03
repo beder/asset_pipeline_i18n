@@ -55,11 +55,13 @@ namespace :i18n do
         
         asset = ENV['LOCALIZED_ASSET']
         # extract locale
-        locale = asset.match(/.*-([[:alpha:]][[:alpha:]])\..*/)[1]
+        matched = asset.match(/(.*)-([[:alpha:]][[:alpha:]])\..*/)
+        asset_name = matched[1]
+        locale = matched[2]
             
         I18n.locale = locale
             
-        manifest_path =  config.assets.manifest ? "#{config.assets.manifest}.#{locale}" : "#{target}/manifest.#{locale}"
+        manifest_path =  config.assets.manifest ? "#{config.assets.manifest}.#{asset_name}-#{locale}" : "#{target}/manifest.#{asset_name}-#{locale}"
         # end e18n      
         
         compiler = Sprockets::StaticCompiler.new(env,
@@ -73,7 +75,6 @@ namespace :i18n do
     
       # i18n
       def merge_manifests
-        
         config = Rails.application.config
         target   = File.join(Rails.public_path, config.assets.prefix)
         
@@ -91,9 +92,11 @@ namespace :i18n do
         
         if config.assets.localized_precompile
           config.assets.localized_precompile.each do |asset|
-            locale = asset.match(/.*-([[:alpha:]][[:alpha:]])\..*/)[1]
+            matched = asset.match(/(.*)-([[:alpha:]][[:alpha:]])\..*/)
+            asset_name = matched[1]
+            locale = matched[2]
             
-            localized_manifest_file = config.assets.manifest ? "#{config.assets.manifest}/manifest.#{locale}/manifest.yml" : "#{target}/manifest.#{locale}/manifest.yml"
+            localized_manifest_file = config.assets.manifest ? "#{config.assets.manifest}/manifest.#{asset_name}-#{locale}/manifest.yml" : "#{target}/manifest.#{asset_name}-#{locale}/manifest.yml"
             File.open(localized_manifest_file) do |f|
               localized_manifest = YAML::load(f)
               manifest.merge!(localized_manifest)
