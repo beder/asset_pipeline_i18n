@@ -8,5 +8,5 @@ Gem::Specification.new do |s|
   s.version = "3.1.7"
   s.homepage = 'https://github.com/simplificator/asset_pipeline_i18n'
 
-  s.add_dependency "actionpack", "~> 3.1.7"  
+  s.add_dependency "actionpack", "~> 3.2.17"  
 end
